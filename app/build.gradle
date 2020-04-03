@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.github.char101.qslock"
+        applicationId "com.i5lee8bit.char101.qslock"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 3
-        versionName "2.0.0"
+        versionName "1.0-Q"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
