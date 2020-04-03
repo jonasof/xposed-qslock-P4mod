@@ -18,7 +18,7 @@ the moment, but based on the code, I would assume this may be common?
 To fix this, I just removed DISABLE2_NOTIFICATION_SHADE references from
 the code, leaving DISABLE2_NONE and DISABLE2_QUICK_SETTINGS untouched.
 The mod still works perfectly as intended. Only tested on P4 / 4 XL on
-Android 10 [Q]. I'm sure it would work on others as well, but since
+Android 10 [Q]. I'm sure it would work on others as well, but since 
 this was just a little personal project, I'm only mentioning it as such.
 
 Again, this repository is really just for my reference. I've been looking
