@@ -1,4 +1,4 @@
-package com.github.char101.qslock;
+package com.i5lee8bit.char101.qslock;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -15,8 +15,7 @@ public class Main implements IXposedHookLoadPackage {
 
     private static final int DISABLE2_NONE = 0;
     private static final int DISABLE2_QUICK_SETTINGS = 1;
-    private static final int DISABLE2_NOTIFICATION_SHADE = 1 << 2;
-
+    
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.android.systemui")) {
             return;
@@ -38,7 +37,7 @@ public class Main implements IXposedHookLoadPackage {
                     Log.e(TAG, "statusBarManager is null");
                     return;
                 }
-                XposedHelpers.callMethod(statusBarManager, "disable2", new Class<?>[]{Integer.class}, DISABLE2_QUICK_SETTINGS | DISABLE2_NOTIFICATION_SHADE);
+                XposedHelpers.callMethod(statusBarManager, "disable2", new Class<?>[]{Integer.class}, DISABLE2_QUICK_SETTINGS);
             }
         });
 
