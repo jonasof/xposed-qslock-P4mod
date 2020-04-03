@@ -1,4 +1,4 @@
-# xposed-qslock
+# xposed-qslock-P4mod
 Xposed module to disable the quicksettings view on lockscreen (modified for Pixel 4 / 4 XL)
 
 
