@@ -3,7 +3,7 @@
 
     <application
         android:allowBackup="true"
-        android:label="NoQSInLockScreen"
+        android:label="NoQSInLockScreen (P4 Mod)"
         android:supportsRtl="true"
         >
         <meta-data
@@ -11,7 +11,7 @@
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="Disable quick settings in the lock screen" />
+            android:value="Disable quick settings in the lock screen (modified for Pixel 4 / 4 XL)" />
         <meta-data
             android:name="xposedminversion"
             android:value="82" />
