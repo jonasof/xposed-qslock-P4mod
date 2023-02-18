@@ -10,12 +10,14 @@ import android.app.AndroidAppHelper;
 import android.content.Context;
 import android.util.Log;
 
+import java.lang.reflect.Method;
+
 public class Main implements IXposedHookLoadPackage {
     private static final String TAG = "qslock";
 
     private static final int DISABLE2_NONE = 0;
     private static final int DISABLE2_QUICK_SETTINGS = 1;
-    
+
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.android.systemui")) {
             return;
@@ -23,7 +25,9 @@ public class Main implements IXposedHookLoadPackage {
 
         XposedBridge.log(TAG + ": started");
 
-        XposedHelpers.findAndHookMethod("com.android.keyguard.KeyguardDisplayManager", lpparam.classLoader, "show", new XC_MethodHook() {
+        Method updateDisplaysMethod = this.findMethodByName(XposedHelpers.findClass("com.android.keyguard.KeyguardDisplayManager", lpparam.classLoader), "updateDisplays");
+
+        XposedBridge.hookMethod(updateDisplaysMethod, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 Log.i(TAG, "show");
@@ -37,26 +41,27 @@ public class Main implements IXposedHookLoadPackage {
                     Log.e(TAG, "statusBarManager is null");
                     return;
                 }
-                XposedHelpers.callMethod(statusBarManager, "disable2", new Class<?>[]{Integer.class}, DISABLE2_QUICK_SETTINGS);
-            }
-        });
 
-        XposedHelpers.findAndHookMethod("com.android.keyguard.KeyguardDisplayManager", lpparam.classLoader, "hide", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Log.i(TAG, "hide");
-                Context context = (Context) AndroidAppHelper.currentApplication();
-                if (context == null) {
-                    Log.e(TAG, "context is null");
-                    return;
+                boolean isLockScreenActive = param.args[0].toString() == "true";
+
+                if (isLockScreenActive) {
+                    XposedHelpers.callMethod(statusBarManager, "disable2", new Class<?>[]{Integer.class}, DISABLE2_QUICK_SETTINGS);
+                } else {
+                    XposedHelpers.callMethod(statusBarManager, "disable2", new Class<?>[]{Integer.class}, DISABLE2_NONE);
                 }
-                Object statusBarManager = context.getSystemService("statusbar");
-                if (statusBarManager == null) {
-                    Log.e(TAG, "statusBarManager is null");
-                    return;
-                }
-                XposedHelpers.callMethod(statusBarManager, "disable2", new Class<?>[]{Integer.class}, DISABLE2_NONE);
             }
         });
+    }
+
+    private Method findMethodByName(Class cl, String name) {
+        Method[] methods = cl.getDeclaredMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName() == name) {
+                return methods[i];
+            }
+        }
+
+        return null;
     }
 }
